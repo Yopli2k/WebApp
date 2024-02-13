@@ -1,0 +1,77 @@
+{#
+/**
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#}
+
+{#
+    Add a input field to a form.
+    If the type is 'tel' then the pattern attribute is added.
+
+    @param controller The controller object.
+    @param type The type of the input field.
+    @param name The name of the input field.
+    @param label The label of the input field.
+#}
+{% macro formInput(controller, type, name, label, value, required) %}
+    <div class="form-floating mb-3">
+        <input id="{{ name }}" type="{{ type }}" class="form-control"
+                {% if type == 'tel' %} pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}" {% endif %}
+               name="{{ name }}"
+               placeholder="{{ label }}"
+               value="{{ value }}"
+               autocomplete="false"
+                {% if required %} required{% endif %}>
+        <label for="{{ name }}">{{ label }}</label>
+    </div>
+{% endmacro %}
+
+
+{% macro formRating(controller, name, value) %}
+    {% if value is empty %}{% set value = 5 %}{% endif %}
+    <div class="rating">
+        {% for item in 1..5 %}
+            {% set selected = item == value ? 'checked' : '' %}
+            <label>
+                <input type="radio" name="{{ name }}" value="{{ value }}" {{ selected }} />
+                {% for star in 1..item %}
+                    <span class="icon">★</span>
+                {% endfor %}
+            </label>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+
+{% macro formRGPD(controller) %}
+    <div class="row">
+        <div class="col-lg-8">
+            <p class="border border-3 mb-3 p-2">
+                La persona responsable del archivo, utilizará esta información para responder a las
+                solicitudes de contacto. Los datos se guardarán en nuestros servidores
+                dentro de la UE. Puede acceder, rectificar o eliminarlos, enviando un
+                mensaje utilizando este mismo formulario, indicando en él la información de contacto
+                original, así como la acción deseada.
+            </p>
+        </div>
+
+        <div class="col-lg-4 mb-3">
+            {{ _self.recaptcha(controller, 'verifyRecaptchaSubmit', 'expiredRecaptchaSubmit') }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro recaptcha(controller, recaptchaCallback, expiredRecaptchaCallback) %}
+    <div class="g-recaptcha" data-sitekey="-- PUT YOUR KEY HERE --" data-callback="{{ recaptchaCallback }}" data-expired-callback="{{ expiredRecaptchaCallback }}"></div>
+{% endmacro %}

@@ -1,0 +1,109 @@
+{#
+/**
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#}
+
+{#
+    Add a cookie alert to a page.
+
+    @param controller The controller object.
+#}
+{% macro cookieAlert(controller) %}
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="staticBackdropLabel">Aviso Legal</h2>
+                </div>
+                <div class="modal-body">
+                    <h3>¡Bienvenido a WebApp!</h3>
+                    <p>Este sitio web utiliza cookies para mejorar tu experiencia de usuario y proporcionar contenido personalizado. <strong>Al hacer clic en "Aceptar", aceptas el uso de todas las cookies</strong>. Puedes personalizar tu configuración de cookies en cualquier momento desde la configuración del navegador.</p>
+                    <p>Algunas cookies son esenciales para el funcionamiento del sitio, mientras que otras nos ayudan a mejorar tu experiencia al proporcionar información sobre cómo se utiliza el sitio. Para obtener más detalles sobre las cookies que utilizamos, consulta nuestra Política de Cookies.</p>
+                    <p><strong>¡Gracias por elegir WebApp y disfruta de tu experiencia de lectura!</strong></p>
+                    <br>
+                    <div class="text-center">
+                        <a href="LegalNotice" class="btn btn-outline-secondary btnhover">Aviso Legal</a>
+                        <a href="PrivacyPolicy" class="btn btn-outline-secondary btnhover">Política Privacidad</a>
+                        <a href="CookiesPolicy" class="btn btn-outline-secondary btnhover">Política Cookies</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="acceptCookies();" class="btn btn-primary btnhover w-100">A C E P T O</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function acceptCookies() {
+            const cookieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('staticBackdrop'));
+            cookieModal.hide();
+            document.cookie = "WebAppAcceptCookie=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/";
+        }
+
+        window.onload = function () {
+            const cookieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('staticBackdrop'));
+            cookieModal.show();
+        }
+    </script>
+{% endmacro %}
+
+{#
+    Add a collapse card with a title and body to a page.
+    The card can be expanded and collapsed with a icon into header.
+
+    @param controller The controller object.
+    @param parent The id name of the parent element.
+    @param child The id name of the child element.
+    @param title The title of the card.
+    @param body The body of the card (collapsed).
+#}
+{% macro faqCard(controller, parent, child, title, body) %}
+    <div class="card">
+        <div class="card-header" id="{{ parent }}">
+            <h3 class="title" data-bs-toggle="collapse" data-bs-target="#{{ child }}" aria-expanded="false" aria-controls="{{ child }}">
+                <span>{{ title }}</span>
+                <span class="icon"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+            </h3>
+        </div>
+        <div id="{{ child }}" class="collapse accordion-collapse" aria-labelledby="headingOne" data-bs-parent="#{{ parent }}">
+            <div class="card-body">
+                <p>{{ body }}</p>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+    Add the list of messages of one level to a page.
+
+    @param controller The controller object.
+    @param level The level of the messages.
+    @param style The bootstrap style of the messages.
+#}
+{% macro message(controller, level, style, close) %}
+    {% set messages = controller.message.getMessages(level) %}
+    {% if messages | length > 0 %}
+        <div class="alert alert-{{ style }} alert-dismissible fade show" role="alert">
+            <button type="button" class="close btn-close" data-dismiss="alert" data-bs-dismiss="alert" aria-label="Close">
+                {% if close %}<span aria-hidden="true">&times;</span>{% endif %}
+            </button>
+            {% for item in messages %}
+                <div>{{ item | raw }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}

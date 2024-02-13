@@ -1,0 +1,48 @@
+{#
+/**
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#}
+{% extends "Master/FrontTemplate.html.twig" %}
+
+{% block meta %}
+    {{ parent() }}
+    <title>Controller not found</title>
+    <meta name="description" content="Controller not found" />
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Chango" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="Assets/css/template_error.css" />
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="content">
+        <div class="error">
+            <div>
+                <div class="error-icon">
+                    <h1>!</h1>
+                </div>
+                <h2>Error<br>404</h2>
+            </div>
+            <p>
+                The page <strong>{{ controllerName }}</strong> don't exist or is temporarily unavailable.
+                <a href="index.php">Back to homepage</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

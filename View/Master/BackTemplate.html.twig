@@ -1,0 +1,128 @@
+{#
+/**
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ constant('APP_LANG') | slice(0, 2) }}" xml:lang="{{ constant('APP_LANG') | slice(0, 2) }}" >
+    <head>
+        {% block meta %}
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <meta name="generator" content="WebApp" />
+            <meta name="robots" content="noindex"/>
+            <meta property="og:title" content="Web App"/>
+            <meta property="og:description" content="Web application base"/>
+            <meta property="og:image" content="Assets/images/webapp-card.png"/>
+        {% endblock %}
+        {% block icons %}
+            <link rel="icon" type="image/x-icon" href="{{ asset('Assets/images/favicon.png') }}" />
+            <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('Assets/images/apple-icon-180x180.png') }}" />
+            {# TODO: add apple icons for ipad and iphone #}
+        {% endblock %}
+        {% block css %}
+            <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('node_modules/@fortawesome/fontawesome-free/css/all.min.css') }}"/>
+            <link rel="stylesheet" href="{{ asset('Assets/css/template_back.css') }}"/>
+        {% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+            <script src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('node_modules/bootbox/dist/bootbox.min.js') }}"></script>
+            <script src="{{ asset('node_modules/bootbox/dist/bootbox.locales.min.js') }}"></script>
+            <script src="{{ asset('node_modules/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
+            <script src="{{ asset('Assets/js/Template_Back.js') }}"></script>
+        {% endblock %}
+    </head>
+    {% block fullBody %}
+        <body>
+            <div class="container-fluid">
+                <div class="row d-flex">
+                    {# MENU PANEL #}
+                    <div class="col-md-2 col-1 pl-0 pr-0 collapse width show" id="sidebar">
+                    {% block sidebar %}
+                        {# Logo #}
+                        <div class="list-group-item d-inline-block collapsed logo">
+                            <img src="{{ asset('Assets/images/logo.png') }}" alt="Logo WebApp" class="d-none d-md-inline logo-image img-circle">
+                            <span class="d-none d-md-inline logo-text font-weight-light">WebApp</span>
+                        </div>
+                        <div class="sidebar-divider"></div>
+                        {# Sidebar Menu #}
+                        <div class="list-group border-0 text-center text-md-left">
+                        {% block sidebarContent %}
+                            <a href="{{ asset('ListMember') }}" class="list-group-item d-inline-block collapsed">
+                                <i class="fa-regular fa-address-book mr-2"></i>
+                                <span class="d-none d-md-inline">Asociados</span>
+                            </a>
+                            <div class="sidebar-divider"></div>
+                            <a href="{{ asset('ListUser') }}" class="list-group-item d-inline-block collapsed">
+                                <i class="fa-solid fa-user-gear mr-2"></i>
+                                <span class="d-none d-md-inline">Bibliotecarios</span>
+                            </a>
+                            <div class="sidebar-divider"></div>
+                        {% endblock %}
+                        </div>
+                    {% endblock %}
+                    </div>
+                    {# CONTENT PANEL #}
+                    <div class="col-md-10 pl-md-2">
+                        {% block navbar %}
+                            <nav class="navbar navbar-expand navbar-light">
+                                {% block navbarContent %}
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item">
+                                            <a href="#" data-target="#sidebar" data-toggle="collapse"><i class="text-dark fa fa-navicon fa-lg py-2 p-1"></i></a>
+                                        </li>
+                                    </ul>
+                                    {% block navbarButtons %}
+                                    {% endblock %}
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item dropdown ">
+                                            <a class="nav-link dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <div class="user-nav d-sm-flex  d-lg-inline">
+                                                    <i class="fas fa-user fa-sm fa-fw mr-2"></i>
+                                                    <span class="user-name font-weight-bolder">{{ controller.user.name }}</span>
+                                                </div>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right" aria-labelledby="dropdown-user">
+                                                <a class="dropdown-item" href="{{ controller.user.url() }}"><i class="fas fa-edit fa-sm fa-fw mr-2 text-gray-300"></i> Editar perfil</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item text-danger" href="LoginUser?action=logout"><i class="fas fa-arrow-right-from-bracket fa-sm fa-fw mr-2"></i>  Cerrar sesión</a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                {% endblock %}
+                            </nav>
+                        {% endblock %}
+                        {% block messages %}
+                            {% from 'Macro/Utils.html.twig' import message %}
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12">
+                                        {{ message(controller, 'info', 'success', true) }}
+                                        {{ message(controller, 'warning', 'warning', true) }}
+                                        {{ message(controller, 'error', 'danger', true) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endblock %}
+                        {% block body %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </body>
+    {% endblock %}
+</html>
